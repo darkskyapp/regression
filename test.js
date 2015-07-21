@@ -75,6 +75,19 @@
     });
 
     describe("sinusoidal", function() {
+      it(
+        "should return the best fit for a sinusoidal model",
+        function() {
+          eq(
+            regression.sinusoidal(
+              [ 0,  1,  2,  3,  4,  5],
+              [+1, -1, +1, -1, +1, -1],
+              Math.PI
+            ),
+            [0, 1, 0.5 * Math.PI]
+          );
+        }
+      );
     });
   });
 })();
