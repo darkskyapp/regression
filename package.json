@@ -1,0 +1,16 @@
+{
+  "name": "regression",
+  "version": "0.0.1",
+  "description": "general-purpose linear regression toolkit",
+  "main": "./regression.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/darkskyapp/regression.git"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha"
+  }
+}
