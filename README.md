@@ -57,6 +57,12 @@ API
     model][3] with the given frequency for the given dataset. `x` and `y`
     should both be N×1 column vectors. Usage is similarly straightforward:
 
+        /* This finds the following sinusoidal model:
+         * 
+         *     f(x) = 0 + 1 * sin(x * Math.PI + 0.5 * Math.PI)
+         * 
+         * That is, the function returns the constant, amplitude, and phase of
+         * the model, respectively. */
         console.log(
           regression.sinusoidal(
             [ 0,  1,  2,  3],
