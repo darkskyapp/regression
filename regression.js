@@ -3,42 +3,65 @@
   var linear, sinusoidal, regression;
 
   linear = (function() {
-    var invert;
+    var solve;
 
-    invert = function(a, n) {
-      var d;
+    /* Solve Ax=B for x. A should be an NxN square matrix, B should be an Nx1
+     * column vector. */
+    /* FIXME: This is solved using Cramer's rule naively, which is (hideously)
+     * inefficient and exhibits numerical stability issues. This solver should
+     * be replaced with, for example, something like this:
+     * http://web.eecs.utk.edu/~itamar/Papers/JDA2011.pdf */
+    solve = (function() {
+      var determinant;
 
-      switch(n >>> 0) {
-        case 0:
-          return [];
+      determinant = function(a, n) {
+        switch(n >>> 0) {
+          /* Not valid. */
+          case 0:
+            return NaN;
 
-        case 1:
-          return [1.0 / a[0]];
+          /* Several small matrices are special-cased, for efficiency. */
+          case 1:
+            return 1.0 / a[0];
 
-        case 2:
-          d = a[0] * a[3] - a[1] * a[2];
-          return [a[3] / d, -a[1] / d, -a[2] / d, a[0] / d];
+          case 2:
+            return a[0] * a[3] - a[1] * a[2];
 
-        case 3:
-          d = a[0] * (a[4] * a[8] - a[5] * a[7]) +
-              a[1] * (a[5] * a[6] - a[3] * a[8]) +
-              a[2] * (a[3] * a[7] - a[4] * a[6]) ;
-          return [
-            (a[4] * a[8] - a[5] * a[7]) / d,
-            (a[2] * a[7] - a[1] * a[8]) / d,
-            (a[1] * a[5] - a[2] * a[4]) / d,
-            (a[5] * a[6] - a[3] * a[8]) / d,
-            (a[0] * a[8] - a[2] * a[6]) / d,
-            (a[2] * a[3] - a[0] * a[5]) / d,
-            (a[3] * a[7] - a[4] * a[6]) / d,
-            (a[6] * a[1] - a[0] * a[7]) / d,
-            (a[0] * a[4] - a[1] * a[3]) / d
-          ];
+          case 3:
+            return a[0] * (a[4] * a[8] - a[5] * a[7]) +
+                   a[1] * (a[5] * a[6] - a[3] * a[8]) +
+                   a[2] * (a[3] * a[7] - a[4] * a[6]) ;
 
-        default:
-          throw new Error("FIXME");
-      }
-    };
+          /* Larger matrices have to be done the old-fashioned way. */
+          default:
+            throw new Error("FIXME");
+        }
+      };
+
+      return function(a, b) {
+        var d, i, j, n, t, x;
+
+        n = b.length;
+        d = determinant(a, n);
+        x = new Array(n);
+        t = new Array(n);
+
+        for(i = n; i--; ) {
+          for(j = n; j--; ) {
+            t[j] = a[i + j * n];
+            a[i + j * n] = b[j];
+          }
+
+          x[i] = determinant(a, n) / d;
+
+          for(j = n; j--; ) {
+            a[i + j * n] = t[j];
+          }
+        }
+
+        return x;
+      };
+    })();
 
     return function(x, y, m) {
       var a, b, c, i, j, k, n;
@@ -67,19 +90,7 @@
         }
       }
 
-      a = invert(a, m);
-
-      i = m;
-      c = new Array(i);
-      while(i--) {
-        c[i] = 0.0;
-
-        for(j = m; j--; ) {
-          c[i] += a[j + i * m] * b[j];
-        }
-      }
-
-      return c;
+      return solve(a, b);
     };
   })();
 

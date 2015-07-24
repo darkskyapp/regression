@@ -1,6 +1,6 @@
 {
   "name": "regression",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a tiny Javascript toolkit for regression analysis",
   "license": "CC0-1.0",
   "main": "./regression.js",
