@@ -94,23 +94,41 @@
     };
   })();
 
-  sinusoidal = function(x, y, f) {
+  sinusoidal = function(x, y, frequency, phase) {
     var a, b, i, fit, u;
 
-    u = new Array(x.length * 3);
+    frequency = +frequency;
+    phase     = +phase;
 
-    for(i = x.length; i--; ) {
-      u[i * 3 + 0] = 1.0;
-      u[i * 3 + 1] = Math.sin(x[i] * f);
-      u[i * 3 + 2] = Math.cos(x[i] * f);
+    if(isFinite(phase)) {
+      u = new Array(x.length * 2);
+
+      for(i = x.length; i--; ) {
+        u[i * 2 + 0] = 1.0;
+        u[i * 2 + 1] = Math.sin(x[i] * frequency + phase);
+      }
+
+      fit = linear(u, y, 2);
+      fit.push(phase, frequency);
     }
 
-    fit = linear(u, y, 3);
+    else {
+      u = new Array(x.length * 3);
 
-    a = fit[1];
-    b = fit[2];
-    fit[1] = Math.sqrt(a * a + b * b);
-    fit[2] = Math.atan2(b, a);
+      for(i = x.length; i--; ) {
+        u[i * 3 + 0] = 1.0;
+        u[i * 3 + 1] = Math.sin(x[i] * frequency);
+        u[i * 3 + 2] = Math.cos(x[i] * frequency);
+      }
+
+      fit = linear(u, y, 3);
+      fit.push(frequency);
+
+      a = fit[1];
+      b = fit[2];
+      fit[1] = Math.sqrt(a * a + b * b);
+      fit[2] = Math.atan2(b, a);
+    }
 
     return fit;
   };

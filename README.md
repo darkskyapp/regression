@@ -53,16 +53,17 @@ API
     **Note: due to laziness, this only works on 1D, 2D, and 3D datasets. It
     should be straightforward to support higher dimensions if necessary.**
 
-*   `regression.sinusoidal(x,y,frequency)`: Calculates the best fit [sinusoidal
-    model][3] with the given frequency for the given dataset. `x` and `y`
-    should both be N×1 column vectors. Usage is similarly straightforward:
+*   `regression.sinusoidal(x,y,frequency[,phase])`: Calculates the best fit
+    [sinusoidal model][3] with the given frequency for the given dataset. `x`
+    and `y` should both be N×1 column vectors. Usage is similarly
+    straightforward:
 
         /* This finds the following sinusoidal model:
          * 
          *     f(x) = 0 + 1 * sin(x * Math.PI + 0.5 * Math.PI)
          * 
-         * That is, the function returns the constant, amplitude, and phase of
-         * the model, respectively. */
+         * That is, the function returns the constant, amplitude, phase, and
+         * frequency of the model, respectively. */
         console.log(
           regression.sinusoidal(
             [ 0,  1,  2,  3],
@@ -70,7 +71,10 @@ API
             Math.PI
           );
         );
-        /* => [0, 1, 0.5 * Math.PI] */
+        /* => [0, 1, 0.5 * Math.PI, Math.PI] */
+
+    Phase is optional. If not provided, the best phase will be determined
+    automatically; if provided, it will be assumed in the model.
 
 [2]: https://en.wikipedia.org/wiki/Ordinary_least_squares
 [3]: https://en.wikipedia.org/wiki/Sinusoidal_model

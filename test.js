@@ -76,7 +76,22 @@
 
     describe("sinusoidal", function() {
       it(
-        "should return the best fit for a sinusoidal model",
+        "should return the best fit for a sinusoidal model with a phase",
+        function() {
+          eq(
+            regression.sinusoidal(
+              [ 0,  1,  2,  3,  4,  5],
+              [+1, -1, +1, -1, +1, -1],
+              Math.PI,
+              1.5 * Math.PI
+            ),
+            [0, -1, 1.5 * Math.PI, Math.PI]
+          );
+        }
+      );
+
+      it(
+        "should return the best fit for a sinusoidal model without a phase",
         function() {
           eq(
             regression.sinusoidal(
@@ -84,7 +99,7 @@
               [+1, -1, +1, -1, +1, -1],
               Math.PI
             ),
-            [0, 1, 0.5 * Math.PI]
+            [0, 1, 0.5 * Math.PI, Math.PI]
           );
         }
       );
