@@ -15,26 +15,40 @@
       var determinant;
 
       determinant = function(a, n) {
+        var b, d, i, j, m, x, y;
+
         switch(n >>> 0) {
-          /* Not valid. */
           case 0:
             return NaN;
 
-          /* Several small matrices are special-cased, for efficiency. */
           case 1:
             return 1.0 / a[0];
 
           case 2:
             return a[0] * a[3] - a[1] * a[2];
 
-          case 3:
-            return a[0] * (a[4] * a[8] - a[5] * a[7]) +
-                   a[1] * (a[5] * a[6] - a[3] * a[8]) +
-                   a[2] * (a[3] * a[7] - a[4] * a[6]) ;
-
-          /* Larger matrices have to be done the old-fashioned way. */
           default:
-            throw new Error("FIXME");
+            d = 0.0;
+            m = n - 1;
+            b = new Array(m * m);
+
+            for(i = 0; i < n; i++) {
+              j = 0;
+
+              for(y = 1; y < n; y++) {
+                for(x = 0; x < n; x++) {
+                  if(x === i) {
+                    continue;
+                  }
+
+                  b[j++] = a[x + y * n];
+                }
+              }
+
+              d += a[i] * determinant(b, m);
+            }
+
+            return d;
         }
       };
 
