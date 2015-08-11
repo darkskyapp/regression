@@ -15,7 +15,7 @@
       var determinant;
 
       determinant = function(a, n) {
-        var b, d, i, j, m, x, y;
+        var b, d, i, j, m, s, x, y;
 
         switch(n >>> 0) {
           case 0:
@@ -29,8 +29,10 @@
 
           default:
             d = 0.0;
+
             m = n - 1;
             b = new Array(m * m);
+            s = 1.0;
 
             for(i = 0; i < n; i++) {
               j = 0;
@@ -45,7 +47,8 @@
                 }
               }
 
-              d += a[i] * determinant(b, m);
+              d += s * a[i] * determinant(b, m);
+              s = -s;
             }
 
             return d;
