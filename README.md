@@ -50,9 +50,6 @@ API
         );
         /* => [1, -2] */
 
-    **Note: due to laziness, this only works on 1D, 2D, and 3D datasets. It
-    should be straightforward to support higher dimensions if necessary.**
-
 *   `regression.sinusoidal(x,y,frequency[,phase])`: Calculates the best fit
     [sinusoidal model][3] with the given frequency for the given dataset. `x`
     and `y` should both be N×1 column vectors. Usage is similarly
